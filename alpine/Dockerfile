@@ -8,6 +8,7 @@ ENV ASSET $ASSET
 ARG EE_PORTS
 
 COPY kong.tar.gz /tmp/kong.tar.gz
+COPY kong.conf /tmp/kong.conf
 
 ARG KONG_VERSION=2.1.3
 ENV KONG_VERSION $KONG_VERSION
@@ -25,6 +26,8 @@ RUN set -ex; \
 	tar -C /kong -xzf /tmp/kong.tar.gz && \
 	mv /kong/usr/local/* /usr/local && \
 	mv /kong/etc/* /etc && \
+	mv /tmp/kong.conf /etc/kong/kong.conf && \
+	( host=`ip route|awk '/default/ { print $3 }'` && echo "dns_resolver=$host:8602" >> /etc/kong/kong.conf ) && \
 	rm -rf /kong && \
 	apk add --no-cache libstdc++ libgcc openssl pcre perl tzdata libcap zip bash zlib zlib-dev git ca-certificates && \
 	adduser -S kong && \
@@ -33,6 +36,7 @@ RUN set -ex; \
 	chown kong:0 /usr/local/bin/kong && \
 	chmod -R g=u /usr/local/kong && \
 	rm -rf /tmp/kong.tar.gz && \
+	luarocks install kong-plugin-ice-grpc-gateway && \
   if [ "$ASSET" = "ce" ] ; then \
     kong version ; \
   fi;
