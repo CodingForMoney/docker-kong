@@ -27,7 +27,6 @@ RUN set -ex; \
 	mv /kong/usr/local/* /usr/local && \
 	mv /kong/etc/* /etc && \
 	mv /tmp/kong.conf /etc/kong/kong.conf && \
-	( host=`ip route|awk '/default/ { print $3 }'` && echo "dns_resolver=$host:8602" >> /etc/kong/kong.conf ) && \
 	rm -rf /kong && \
 	apk add --no-cache libstdc++ libgcc openssl pcre perl tzdata libcap zip bash zlib zlib-dev git ca-certificates && \
 	adduser -S kong && \
