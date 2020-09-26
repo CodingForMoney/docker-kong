@@ -36,6 +36,7 @@ RUN set -ex; \
 	chmod -R g=u /usr/local/kong && \
 	rm -rf /tmp/kong.tar.gz && \
 	luarocks install kong-plugin-ice-grpc-gateway && \
+	luarocks install kong-plugin-ice-jaeger && \
   if [ "$ASSET" = "ce" ] ; then \
     kong version ; \
   fi;
