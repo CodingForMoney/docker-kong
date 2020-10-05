@@ -9,6 +9,7 @@ ARG EE_PORTS
 
 COPY kong.tar.gz /tmp/kong.tar.gz
 COPY kong.conf /tmp/kong.conf
+COPY lets-encrypt.nginx.conf /tmp/lets-encrypt.nginx.conf
 
 ARG KONG_VERSION=2.1.3
 ENV KONG_VERSION $KONG_VERSION
@@ -27,10 +28,12 @@ RUN set -ex; \
 	mv /kong/usr/local/* /usr/local && \
 	mv /kong/etc/* /etc && \
 	mv /tmp/kong.conf /etc/kong/kong.conf && \
+	mv /tmp/lets-encrypt.nginx.conf /etc/kong/lets-encrypt.nginx.conf && \
 	rm -rf /kong && \
 	apk add --no-cache libstdc++ libgcc openssl pcre perl tzdata libcap zip bash zlib zlib-dev git ca-certificates && \
 	adduser -S kong && \
 	mkdir -p "/usr/local/kong" && \
+	mkdir -p "/home/kong/acme-challenge" && \
 	chown -R kong:0 /usr/local/kong && \
 	chown kong:0 /usr/local/bin/kong && \
 	chmod -R g=u /usr/local/kong && \
