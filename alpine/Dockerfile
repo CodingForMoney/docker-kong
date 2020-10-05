@@ -49,7 +49,9 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 USER kong
 
-COPY dhparam.pem /home/kong/kong.pem
+COPY test.pem /home/kong/fullchain.pem
+COPY testkey.pem /home/kong/kong.pem
+COPY dhparam.pem /home/kong/privkey.pem
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
