@@ -34,6 +34,7 @@ RUN set -ex; \
 	adduser -S kong && \
 	mkdir -p "/usr/local/kong" && \
 	mkdir -p "/home/kong/acme-challenge" && \
+	mkdir -p "/home/kong/ssl" && \
 	chown -R kong:0 /usr/local/kong && \
 	chown kong:0 /usr/local/bin/kong && \
 	chmod -R g=u /usr/local/kong && \
@@ -47,6 +48,8 @@ RUN set -ex; \
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 USER kong
+
+COPY dhparam.pem /home/kong/kong.pem
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
